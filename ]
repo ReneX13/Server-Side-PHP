@@ -1,9 +1,7 @@
 <?php
 	require_once 'sample-data.php';
-	$admin = new User("admin", 1234);
-	$admin->setPinAndAdmin(5555, true);
-	$user = new User("user", 0000);
-	$default_user = new User("tmp", 4789);
+	$admin = new User("admin", 1234, true);
+	$user = new User("user", 0000, false);
 	$flag = false;
 	$captcha_flag = false;
 	session_start();
@@ -20,19 +18,18 @@
 		else{
 
 			if($_POST["username"] == $admin->username 
-				 && $_POST["pin"] == $admin->getPin()){
+				 && $_POST["pin"] == $admin->pin){
 					
 					$_SESSION["username"] = $admin->username;
-					$_SESSION["pin"] = $admin->getPin();
-					$_SESSION["admin"] = $admin->getAdmin();
-					
-				header("Location: index.php");
+					$_SESSION["pin"] = $admin->pin;
+					$_SESSION["admin"] = $admin->admin;
+					header("Location: index.php");
 			}else if($_POST["username"] == $user->username 
-				 && $_POST["pin"] == $user->getPin()){
+				 && $_POST["pin"] == $user->pin){
 					
 					$_SESSION["username"] = $user->username;
-					$_SESSION["pin"] = $user->getPin();
-					$_SESSION["admin"] = $user->getAdmin();
+					$_SESSION["pin"] = $user->pin;
+					$_SESSION["admin"] = $user->admin;
 					header("Location: index.php");
 			}else{
 				$flag = true;
@@ -47,7 +44,7 @@
 ?>
 <html>
 <head>
-<script src='https://www.google.com/recaptcha/api.js'></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
@@ -76,26 +73,10 @@
 
 	<?php 
 		$username = 'username';  
-		echo $default_user->$username."<br>"; 
+		echo $admin->$username."<br>"; 
 
 		$pin = 'pin';
-		//echo $admin->$pin."<br>";
-		echo $default_user->getPin()."<br>";
-		
-		
-		if($default_user->getAdmin()){
-			echo "true <br>";
-		}
-		else{
-			echo "false <br>";
-		}
-		
-		$default_user->setAdmin(true);
-		if($default_user->getAdmin()){
-			echo "true <br>";
-		}else{
-			echo "false <br>";
-		}
+		echo $admin->$pin."<br>";
 	?>
 </body>
 </html>
